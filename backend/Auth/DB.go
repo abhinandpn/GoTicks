@@ -34,4 +34,5 @@ func SuperBaseAuth() {
 	}
 
 	log.Println("Connected to:", version)
+	log.Println("Database connection successful!")
 }
