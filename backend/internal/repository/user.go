@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/abhinandpn/GoTicks/backend/internal/auth"
 	"github.com/abhinandpn/GoTicks/backend/internal/models"
 	"github.com/google/uuid"
 )
@@ -15,6 +16,12 @@ func CreateUser(ctx context.Context, db *sql.DB, user models.User) error {
 		INSERT INTO users (id, name, number, email, password_hash, created_at)
 		VALUES ($1, $2, $3, $4, $5, $6)
 	`
+	Password, err := auth.HashPassword(user.PasswordHash)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Hashed password: %s\n", Password)
+
 	// Ensure values are set (important)
 	if user.ID == uuid.Nil {
 		user.ID = uuid.New()
@@ -22,14 +29,15 @@ func CreateUser(ctx context.Context, db *sql.DB, user models.User) error {
 	if user.CreatedAt.IsZero() {
 		user.CreatedAt = time.Now()
 	}
-	_, err := db.ExecContext(
+
+	_, err = db.ExecContext(
 		ctx,
 		query,
 		user.ID,
 		user.Name,
 		user.Number,
 		user.Email,
-		user.PasswordHash,
+		Password,
 		user.CreatedAt,
 	)
 
