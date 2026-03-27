@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/abhinandpn/GoTicks/backend/internal/models"
@@ -33,4 +34,39 @@ func CreateUser(ctx context.Context, db *sql.DB, user models.User) error {
 	)
 
 	return err
+}
+
+func UpdateUser(ctx context.Context, db *sql.DB, user models.User) error {
+	query := `
+		UPDATE users
+		SET name = $1,
+		    number = $2,
+		    email = $3,
+		    password_hash = $4
+		WHERE id = $5
+	`
+
+	result, err := db.ExecContext(
+		ctx,
+		query,
+		user.Name,
+		user.Number,
+		user.Email,
+		user.PasswordHash,
+		user.ID,
+	)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no user found with id %s", user.ID)
+	}
+
+	return nil
 }
