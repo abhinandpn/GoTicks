@@ -52,6 +52,7 @@ func InitDB() {
 			&models.Booking{},
 			&models.BookingSeat{},
 			&models.Payment{},
+			&models.SeatHold{},
 		)
 
 		if err != nil {
