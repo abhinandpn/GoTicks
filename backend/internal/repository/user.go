@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
@@ -99,4 +100,105 @@ func DeleteUser(ctx context.Context, db *sql.DB, userID uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func GetUserByID(ctx context.Context, db *sql.DB, userID uuid.UUID) (*models.User, error) {
+
+	if userID == uuid.Nil {
+		return nil, errors.New("invalid user ID")
+	}
+
+	query := `
+		SELECT id, name, number, email, password_hash, created_at
+		FROM users
+		WHERE id = $1
+	`
+
+	var user models.User
+
+	err := db.QueryRowContext(ctx, query, userID).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Number,
+		&user.Email,
+		&user.PasswordHash,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user not found")
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func GetUserByEmail(ctx context.Context, db *sql.DB, email string) (*models.User, error) {
+
+	if email == "" {
+		return nil, errors.New("email is required")
+	}
+
+	query := `
+		SELECT id, name, number, email, password_hash, created_at
+		FROM users
+		WHERE email = $1
+		LIMIT 1
+	`
+
+	var user models.User
+
+	err := db.QueryRowContext(ctx, query, email).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Number,
+		&user.Email,
+		&user.PasswordHash,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user not found")
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func GetUserByPhone(ctx context.Context, db *sql.DB, phone string) (*models.User, error) {
+
+	if phone == "" {
+		return nil, errors.New("phone is required")
+	}
+
+	query := `
+		SELECT id, name, number, email, password_hash, created_at
+		FROM users
+		WHERE number = $1
+		LIMIT 1
+	`
+
+	var user models.User
+
+	err := db.QueryRowContext(ctx, query, phone).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Number,
+		&user.Email,
+		&user.PasswordHash,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user not found")
+		}
+		return nil, err
+	}
+
+	return &user, nil
 }
