@@ -45,6 +45,8 @@ func CreateUser(ctx context.Context, db *sql.DB, user models.User) error {
 }
 
 func UpdateUser(ctx context.Context, db *sql.DB, user models.User) error {
+
+	// update make pending for - get the user info / get the update user info (need to add)
 	query := `
 		UPDATE users
 		SET name = $1,
@@ -74,6 +76,26 @@ func UpdateUser(ctx context.Context, db *sql.DB, user models.User) error {
 
 	if rowsAffected == 0 {
 		return fmt.Errorf("no user found with id %s", user.ID)
+	}
+
+	return nil
+}
+func DeleteUser(ctx context.Context, db *sql.DB, userID uuid.UUID) error {
+
+	query := `DELETE FROM users WHERE id = $1`
+
+	result, err := db.ExecContext(ctx, query, userID)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no user found with id %s", userID)
 	}
 
 	return nil
