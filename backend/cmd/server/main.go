@@ -5,7 +5,6 @@ import (
 
 	"github.com/abhinandpn/GoTicks/backend/internal/config"
 	"github.com/abhinandpn/GoTicks/backend/internal/db"
-	"github.com/abhinandpn/GoTicks/backend/internal/demo"
 	"github.com/abhinandpn/GoTicks/backend/internal/migration"
 )
 
@@ -14,7 +13,8 @@ func main() {
 	config.EnvLoad()
 	db.SuperBaseAuth()
 	migration.InitDB()
-	db.InitRedis()
+
 	// demo.DemoCreateUser()
-	demo.CheckRedis()
+
+	db.InitRedis()
 }

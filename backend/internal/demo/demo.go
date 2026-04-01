@@ -8,7 +8,6 @@ import (
 	"github.com/abhinandpn/GoTicks/backend/internal/migration"
 	"github.com/abhinandpn/GoTicks/backend/internal/models"
 	"github.com/abhinandpn/GoTicks/backend/internal/repository"
-	"github.com/redis/go-redis/v9"
 )
 
 func DemoCreateUser() {
@@ -33,19 +32,4 @@ func DemoCreateUser() {
 	}
 
 	fmt.Println("User created successfully data:", NewUser)
-}
-
-func CheckRedis() {
-	ctx := context.Background()
-	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
-	})
-
-	res, err := rdb.Ping(ctx).Result()
-	if err != nil {
-		fmt.Println("❌ Redis not working:", err)
-		return
-	}
-
-	fmt.Println("✅ Redis working:", res) // should print "PONG"
 }
