@@ -13,7 +13,6 @@ func main() {
 	config.EnvLoad()
 	db.SuperBaseAuth()
 	migration.InitDB()
-
 	// demo.DemoCreateUser()
 
 	db.InitRedis()
