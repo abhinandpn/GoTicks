@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/abhinandpn/GoTicks/backend/internal/migration"
+	migration "github.com/abhinandpn/GoTicks/backend/internal/migrations"
 	"github.com/abhinandpn/GoTicks/backend/internal/models"
 	"github.com/abhinandpn/GoTicks/backend/internal/repository"
 )

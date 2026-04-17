@@ -5,7 +5,7 @@ import (
 
 	"github.com/abhinandpn/GoTicks/backend/internal/config"
 	"github.com/abhinandpn/GoTicks/backend/internal/db"
-	"github.com/abhinandpn/GoTicks/backend/internal/migration"
+	migration "github.com/abhinandpn/GoTicks/backend/internal/migrations"
 )
 
 func main() {
